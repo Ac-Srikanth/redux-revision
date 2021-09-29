@@ -1,4 +1,6 @@
 import { client } from '../../api/client'
+import { createSelector } from 'reselect'
+import { StatusFilters } from '../filters/filtersSlice'
 
 const initialState = [
   // { id: 0, text: 'Learn React', completed: true },
@@ -92,3 +94,30 @@ export function saveTodo(text) {
     dispatch(todoAdded(response.todo))
   }
 }
+
+//selectors
+export const selectTodoIds = createSelector(
+  // First, pass one or more "input selector" functions:
+  (state) => state.todos,
+  // Then, an "output selector" that receives all the input results as arguments
+  // and returns a final result value
+  (todos) => todos.map((todo) => todo.id)
+)
+
+export const selectFilteredTodos = createSelector(
+  (state) => state.todos,
+  (state) => state.filters.status,
+  (todos, status) => {
+    if (status === StatusFilters.All) {
+      return todos
+    }
+
+    const completedStatus = status === StatusFilters.Completed
+    return todos.filter((todo) => todo.completed === completedStatus)
+  }
+)
+
+export const selectFilteredTodoIds = createSelector(
+  selectFilteredTodos,
+  (filteredTodos) => filteredTodos.map((todo) => todo.id)
+)
