@@ -20,9 +20,10 @@ const TodoListItem = ({ id }) => {
   }
 
   const handleColorChanged = (e) => {
+    const color = e.target.value
     dispatch({
       type: 'todos/colorSelected',
-      payload: { color: e.target.value, id: todo.id },
+      payload: { color, todoId: todo.id },
     })
   }
 
@@ -38,7 +39,7 @@ const TodoListItem = ({ id }) => {
       {capitalize(c)}
     </option>
   ))
-  console.log(text)
+  // console.log(text)
   return (
     <li>
       <div className="view">
